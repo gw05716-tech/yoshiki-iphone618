@@ -54,6 +54,35 @@ button,input{font:inherit}button{border:0;cursor:pointer} .stage{height:100dvh;w
 .lightbox{position:absolute;inset:0;z-index:85;background:#0c0c0d;display:none;align-items:center;justify-content:center;flex-direction:column;gap:15px;padding:25px 5px;color:white}.lightbox.show{display:flex}.lightbox img{max-width:99%;max-height:72%;object-fit:contain}.lightboxClose{position:absolute;top:60px;left:16px;color:#fff;background:#333;border-radius:50%;width:33px;height:33px;font-size:20px}.lightboxControls{display:flex;align-items:center;gap:25px;font-size:12px}.lightboxControls button{background:#ffffff2e;color:white;font-size:20px;border-radius:50%;width:34px;height:34px}.infoModal{position:absolute;inset:0;z-index:83;background:#0008;display:none;align-items:center;justify-content:center;padding:35px}.infoModal.show{display:flex}.infoBox{border-radius:20px;background:#fff;padding:24px;color:#111;line-height:1.65;font-size:13px}.infoBox button{margin-top:13px;background:#f4c4d3;border-radius:14px;padding:8px 16px;color:#673b4c}
 .toast{position:absolute;z-index:87;bottom:111px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#24252bdc;color:white;border-radius:20px;padding:10px 15px;font-size:12px;display:none}.toast.show{display:block}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Phone app – standalone; X and home untouched */
+.phoneApp{background:#fff;color:#080808}
+.phoneKeyView{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding-top:90px;background:#fff}
+.phoneDigits{height:78px;width:90%;text-align:center;display:flex;align-items:center;justify-content:center;font-size:34px;letter-spacing:1px;font-weight:390;white-space:nowrap;overflow:hidden}
+.phoneAdd{height:27px;color:#1684f5;font-size:15px;background:none;font-weight:500}
+.phoneAdd:disabled{visibility:hidden}
+.phoneKeys{display:grid;grid-template-columns:repeat(3,77px);gap:15px 24px;margin-top:21px}
+.phoneKey{height:77px;width:77px;border-radius:50%;background:#e5e5e7;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#080808;padding:0;touch-action:manipulation}
+.phoneKey:active{background:#c9c9ce}.phoneKey .digit{font-size:35px;font-weight:370;line-height:38px}.phoneKey .letters{font-size:10px;letter-spacing:2px;line-height:12px;font-weight:590;height:12px}
+.phoneActions{display:grid;grid-template-columns:repeat(3,77px);gap:15px 24px;margin-top:20px;align-items:center;justify-items:center}
+.phoneStart{height:76px;width:76px;border-radius:50%;background:#30c65a;display:grid;place-items:center;color:white}
+.phoneStart svg{width:33px;height:33px;fill:currentColor}
+.phoneDelete{background:none;padding:20px;color:#303035}.phoneDelete svg{width:28px;height:28px;stroke:currentColor;stroke-width:1.8;fill:none}
+.phoneTabBar{position:absolute;bottom:10px;left:0;right:0;height:80px;background:#f8f8faed;border-top:1px solid #e1e1e5;display:flex;justify-content:space-around;align-items:flex-start;padding-top:12px}
+.phoneTab{background:none;color:#81818b;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;min-width:64px;padding:0}
+.phoneTab svg{width:25px;height:25px;stroke:currentColor;stroke-width:1.9;fill:none}.phoneTab.selected{color:#0a84ff}
+.phoneCallView{position:absolute;inset:0;background:linear-gradient(#42434b,#151519);color:#fff;display:none;flex-direction:column;align-items:center;padding:120px 15px 84px}
+.phoneApp.calling .phoneKeyView{display:none}.phoneApp.calling .phoneCallView{display:flex}
+.phoneCalledNumber{font-size:33px;font-weight:400;max-width:100%;word-break:break-all;text-align:center;line-height:1.25}
+.phoneCallStatus{font-size:17px;color:#d0d0d4;margin-top:13px}
+.phoneCallGrid{display:grid;grid-template-columns:repeat(3,78px);column-gap:36px;row-gap:27px;margin-top:auto;margin-bottom:40px}
+.phoneCallControl{display:flex;align-items:center;flex-direction:column;gap:9px;color:#fff;font-size:13px;background:none;white-space:nowrap}
+.phoneCallControl .circle{width:75px;height:75px;border-radius:50%;background:#ffffff36;display:grid;place-items:center;font-size:30px}
+.phoneCallControl svg{height:29px;width:29px;stroke:currentColor;stroke-width:1.7;fill:none}
+.phoneCallControl.muted .circle{background:#fafafa;color:#121212}
+.phoneHang{height:78px;width:78px;border-radius:50%;background:#f04445;color:white;display:grid;place-items:center;flex:none;margin-top:0}
+.phoneHang svg{width:34px;height:34px;fill:currentColor;transform:rotate(135deg)}
+.device.phoneCalling .status{color:#fff}.device.phoneCalling .battery{background:#ddd;color:#333}
 </style></head><body>
 <div class="stage"><div class="fit" id="fit"><div class="device locked" id="device"><div class="screen" id="screen">
 <div class="home" id="home">
@@ -75,6 +104,47 @@ button,input{font:inherit}button{border:0;cursor:pointer} .stage{height:100dvh;w
  <button class="floatCompose" aria-label="새 글" id="compose">＋</button>
  <div class="xNav"><button data-nav="home" class="current" aria-label="홈"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10h-7v-6h-4v6H3z"/></svg><span class="navDot"></span></button><button data-nav="search" aria-label="검색"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg></button><button data-nav="grok" aria-label="Grok"><svg viewBox="0 0 24 24"><path d="M4 20 20 4M3 12A9 9 0 0 1 12 3M12 21a9 9 0 0 0 9-9"/></svg></button><button data-nav="alerts" aria-label="알림"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></button><button data-nav="dm" aria-label="쪽지"><svg viewBox="0 0 24 24"><path d="M4 5h16v13H8l-4 3z"/></svg></button></div>
  <div class="subpage" id="subpage"><div class="subHead"><button id="subBack" aria-label="뒤로">←</button><span id="subTitle">게시</span></div><div class="innerScroll" id="subBody"></div></div>
+</section>
+
+<section class="appPage phoneApp" id="phoneApp" aria-label="전화 앱">
+ <div class="phoneKeyView">
+  <div class="phoneDigits" id="phoneDigits" aria-live="polite"></div>
+  <button class="phoneAdd" id="phoneAdd" disabled>번호 추가</button>
+  <div class="phoneKeys" id="phoneKeys">
+   <button class="phoneKey" data-key="1"><span class="digit">1</span><span class="letters"> </span></button>
+   <button class="phoneKey" data-key="2"><span class="digit">2</span><span class="letters">ABC</span></button>
+   <button class="phoneKey" data-key="3"><span class="digit">3</span><span class="letters">DEF</span></button>
+   <button class="phoneKey" data-key="4"><span class="digit">4</span><span class="letters">GHI</span></button>
+   <button class="phoneKey" data-key="5"><span class="digit">5</span><span class="letters">JKL</span></button>
+   <button class="phoneKey" data-key="6"><span class="digit">6</span><span class="letters">MNO</span></button>
+   <button class="phoneKey" data-key="7"><span class="digit">7</span><span class="letters">PQRS</span></button>
+   <button class="phoneKey" data-key="8"><span class="digit">8</span><span class="letters">TUV</span></button>
+   <button class="phoneKey" data-key="9"><span class="digit">9</span><span class="letters">WXYZ</span></button>
+   <button class="phoneKey" data-key="*"><span class="digit">＊</span><span class="letters"> </span></button>
+   <button class="phoneKey" data-key="0"><span class="digit">0</span><span class="letters">＋</span></button>
+   <button class="phoneKey" data-key="#"><span class="digit">＃</span><span class="letters"> </span></button>
+  </div>
+  <div class="phoneActions"><span></span><button class="phoneStart" id="phoneStart" aria-label="전화 걸기"><svg viewBox="0 0 24 24"><path d="M6.7 2.3 9.9 6a1.6 1.6 0 0 1-.1 2.1L8 10c1 2.3 3.8 5.2 6.1 6.1l1.9-1.8a1.6 1.6 0 0 1 2.1-.1l3.6 3.2c.5.5.6 1.2.2 1.9-1 1.7-2.8 2.6-4.8 2.4C9.5 21 3 14.5 2.3 6.8c-.2-2 .7-3.8 2.4-4.8.7-.4 1.4-.3 2 .3Z"/></svg></button><button class="phoneDelete" id="phoneDelete" aria-label="마지막 숫자 지우기"><svg viewBox="0 0 24 24"><path d="M9 4H21v16H9L2 12z"/><path d="m12 9 6 6m0-6-6 6"/></svg></button></div>
+  <nav class="phoneTabBar" aria-label="전화 하단 메뉴">
+   <button class="phoneTab" data-ptab="즐겨찾기"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.5 20l1.1-6.1-4.5-4.4 6.2-.9z"/></svg>즐겨찾기</button>
+   <button class="phoneTab" data-ptab="최근 통화"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/></svg>최근 통화</button>
+   <button class="phoneTab" data-ptab="연락처"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 21v-2c0-4 3-6 7-6s7 2 7 6v2"/></svg>연락처</button>
+   <button class="phoneTab selected" data-ptab="키패드"><svg viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></g></svg>키패드</button>
+   <button class="phoneTab" data-ptab="음성사서함"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="4"/><circle cx="18" cy="12" r="4"/><path d="M6 16h12"/></svg>음성사서함</button>
+  </nav>
+ </div>
+ <div class="phoneCallView" aria-label="가상 통화 화면">
+  <div class="phoneCalledNumber" id="phoneCalledNumber"></div><div class="phoneCallStatus" id="phoneCallStatus">연결 중…</div>
+  <div class="phoneCallGrid">
+   <button class="phoneCallControl" id="phoneMute"><span class="circle"><svg viewBox="0 0 24 24"><path d="m4 4 16 16M9 9v3a3 3 0 0 0 5.1 2.1M15 9V6a3 3 0 0 0-5.7-1.4M5 11v1a7 7 0 0 0 12 5M19 11v1c0 .8-.1 1.5-.4 2.2M12 19v3M8 22h8"/></svg></span>음소거</button>
+   <button class="phoneCallControl" data-cfeature="키패드"><span class="circle">▦</span>키패드</button>
+   <button class="phoneCallControl" id="phoneSpeaker"><span class="circle"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 9c2 2 2 4 0 6M19 6c4 4 4 8 0 12"/></svg></span>스피커</button>
+   <button class="phoneCallControl" data-cfeature="통화 추가"><span class="circle">＋</span>통화 추가</button>
+   <button class="phoneCallControl" data-cfeature="FaceTime"><span class="circle"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="3"/><path d="m16 10 6-3v10l-6-3"/></svg></span>FaceTime</button>
+   <button class="phoneCallControl" data-cfeature="연락처"><span class="circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg></span>연락처</button>
+  </div>
+  <button class="phoneHang" id="phoneHang" aria-label="통화 종료"><svg viewBox="0 0 24 24"><path d="M6.7 2.3 9.9 6a1.6 1.6 0 0 1-.1 2.1L8 10c1 2.3 3.8 5.2 6.1 6.1l1.9-1.8a1.6 1.6 0 0 1 2.1-.1l3.6 3.2c.5.5.6 1.2.2 1.9-1 1.7-2.8 2.6-4.8 2.4C9.5 21 3 14.5 2.3 6.8c-.2-2 .7-3.8 2.4-4.8.7-.4 1.4-.3 2 .3Z"/></svg></button>
+ </div>
 </section>
 <section class="appPage" id="comingSoon"><div class="placeholder"><img class="placeholderIcon" id="placeholderImage" alt="앱 아이콘"><h2 id="placeholderName"></h2><p>이 앱은 우리 다음 작업에서<br>함께 기능을 만들어갈 예정이야 🩷</p><button class="goBack" id="placeholderBack">홈 화면으로</button></div></section>
 <div class="lock" id="lock"><div class="lockDate">10월 30일 금요일</div><div class="lockTime">10:05</div><div class="lockCenter">♡</div><div class="lockLower"><div class="lockShortcuts"><span class="lockCircle">ϟ</span><span class="lockCircle">◉</span></div><button class="lockSwipe" id="unlock">⌃　위로 밀어 잠금 해제</button></div></div>
@@ -122,12 +192,12 @@ addEventListener('resize',resize);resize();
 function unlock(){if(!device.classList.contains('locked'))return;device.classList.remove('locked');lock.classList.add('unlocked');$('#homeBar').classList.remove('light')}
 $('#unlock').addEventListener('click',unlock);lock.addEventListener('click',unlock);let tStartY=0;lock.addEventListener('touchstart',e=>tStartY=e.touches[0].clientY,{passive:true});lock.addEventListener('touchend',e=>{if(tStartY-e.changedTouches[0].clientY>30)unlock()},{passive:true});
 function closeSub(){sub.classList.remove('show');previousSubview='';}
-function goHome(){if($('#lightbox').classList.contains('show'))closeLightbox();$('#infoModal').classList.remove('show');xApp.classList.remove('open');placeholder.classList.remove('open');currentApp='';closeSub();$('#homeBar').classList.remove('light')}
+function goHome(){if($('#lightbox').classList.contains('show'))closeLightbox();$('#infoModal').classList.remove('show');xApp.classList.remove('open');placeholder.classList.remove('open');endPhoneCall();phoneApp.classList.remove('open');currentApp='';closeSub();$('#homeBar').classList.remove('light')}
 $('#homeBar').addEventListener('click',()=>{if(device.classList.contains('locked'))unlock();else goHome()});
 let homeY=0;$('#screen').addEventListener('touchstart',e=>homeY=e.touches[0].clientY,{passive:true});$('#screen').addEventListener('touchend',e=>{if(!device.classList.contains('locked') && e.changedTouches[0].clientY-homeY < -90 && homeY>innerHeight-110){goHome()}},{passive:true});
 function openApp(name){unlock();if(name==='inactive')return;
- xApp.classList.remove('open');placeholder.classList.remove('open');closeSub();currentApp=name;
- if(name==='x'){xApp.classList.add('open');renderFeed();}else{const names={instagram:'Instagram',plus:'Plus Chat',photos:'사진',calendar:'캘린더',camera:'카메라',phone:'전화',music:'음악'};$('#placeholderName').textContent=names[name]||name;$('#placeholderImage').src=IMAGES[name]||IMAGES.photos;placeholder.classList.add('open')}
+ xApp.classList.remove('open');placeholder.classList.remove('open');phoneApp.classList.remove('open');endPhoneCall();closeSub();currentApp=name;
+ if(name==='x'){xApp.classList.add('open');renderFeed();}else if(name==='phone'){phoneApp.classList.add('open');}else{const names={instagram:'Instagram',plus:'Plus Chat',photos:'사진',calendar:'캘린더',camera:'카메라',phone:'전화',music:'음악'};$('#placeholderName').textContent=names[name]||name;$('#placeholderImage').src=IMAGES[name]||IMAGES.photos;placeholder.classList.add('open')}
 }
 $$('[data-app]').forEach(el=>el.addEventListener('click',()=>openApp(el.dataset.app)));
 $('#placeholderBack').addEventListener('click',goHome);
@@ -164,5 +234,25 @@ function searchView(q='요시키'){let results=posts.filter(p=>(p.text+' '+p.nam
 $$('[data-nav]').forEach(el=>el.addEventListener('click',()=>{const n=el.dataset.nav;if(n==='home'){closeSub();feed.scrollTop=0;}else if(n==='search'){searchView()}else toast(n==='grok'?'Grok은 이번 버전에서 열리지 않아':n==='alerts'?'알림은 다음에 만들자 🩷':'DM은 다음에 만들자 🩷')}));
 $('#compose').addEventListener('click',()=>toast('YOSHIKI가 타임라인을 구경하는 중 👀'));
 $('#xInfo').addEventListener('click',()=>$('#infoModal').classList.add('show'));$('#infoClose').addEventListener('click',()=>$('#infoModal').classList.remove('show'));
+
+// Self-contained simulated phone experience (no actual calls placed).
+const phoneApp=$('#phoneApp');let dialNumber='',phonePhase='idle',phoneTimeout=null,phoneTicker=null,phoneStartAt=0,phoneAudio=null,ringNodes=[],phoneMuted=false,phoneSpeaker=false;
+function showDial(){const d=$('#phoneDigits');d.textContent=dialNumber;d.style.fontSize=dialNumber.length>17?'24px':dialNumber.length>12?'29px':'34px';$('#phoneAdd').disabled=!dialNumber;$('#phoneDelete').style.visibility=dialNumber?'visible':'hidden'}
+$('#phoneKeys').addEventListener('click',e=>{const k=e.target.closest('[data-key]');if(k&&dialNumber.length<25){dialNumber+=k.dataset.key;showDial()}});
+$('#phoneDelete').addEventListener('click',()=>{dialNumber=dialNumber.slice(0,-1);showDial()});
+$('#phoneAdd').addEventListener('click',()=>toast('가상 전화 앱에서는 연락처 저장을 지원하지 않아'));
+$$('[data-ptab]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.ptab!=='키패드')toast(b.dataset.ptab+'은 아직 준비 중이야 🩷')}));
+function silencePhone(){ringNodes.forEach(n=>{try{n.stop()}catch(e){};try{n.disconnect()}catch(e){}});ringNodes=[];if(phoneAudio){try{phoneAudio.close()}catch(e){}phoneAudio=null}}
+function ringPhone(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;phoneAudio=new AC();phoneAudio.resume();const t=phoneAudio.currentTime;for(const offset of [0,3]){for(const freq of [440,480]){const o=phoneAudio.createOscillator(),g=phoneAudio.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(0,t+offset);g.gain.linearRampToValueAtTime(.055,t+offset+.035);g.gain.setValueAtTime(.055,t+offset+1.85);g.gain.linearRampToValueAtTime(0,t+offset+1.95);o.connect(g).connect(phoneAudio.destination);o.start(t+offset);o.stop(t+offset+2);ringNodes.push(o)}}}catch(e){silencePhone()}}
+function prettyNumber(s){return s||'알 수 없음'}
+function phoneElapsed(){const n=Math.floor((Date.now()-phoneStartAt)/1000);$('#phoneCallStatus').textContent=`${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`}
+function startPhoneCall(){if(phonePhase!=='idle')return;phonePhase='ringing';phoneApp.classList.add('calling');device.classList.add('phoneCalling');$('#homeBar').classList.add('light');$('#phoneCalledNumber').textContent=prettyNumber(dialNumber);$('#phoneCallStatus').textContent='연결 중…';phoneMuted=false;phoneSpeaker=false;$('#phoneMute').classList.remove('muted');$('#phoneSpeaker').classList.remove('muted');ringPhone();phoneTimeout=setTimeout(()=>{if(phonePhase!=='ringing')return;silencePhone();phonePhase='connected';phoneStartAt=Date.now();phoneElapsed();phoneTicker=setInterval(phoneElapsed,3000);},5000)}
+function endPhoneCall(){clearTimeout(phoneTimeout);clearInterval(phoneTicker);phoneTimeout=null;phoneTicker=null;silencePhone();phonePhase='idle';phoneApp.classList.remove('calling');device.classList.remove('phoneCalling');if(currentApp==='phone')$('#homeBar').classList.remove('light');}
+$('#phoneStart').addEventListener('click',startPhoneCall);$('#phoneHang').addEventListener('click',endPhoneCall);
+$('#phoneMute').addEventListener('click',()=>{phoneMuted=!phoneMuted;$('#phoneMute').classList.toggle('muted',phoneMuted);toast(phoneMuted?'음소거 켜짐':'음소거 꺼짐')});
+$('#phoneSpeaker').addEventListener('click',()=>{phoneSpeaker=!phoneSpeaker;$('#phoneSpeaker').classList.toggle('muted',phoneSpeaker);toast(phoneSpeaker?'스피커 켜짐':'스피커 꺼짐')});
+$$('[data-cfeature]').forEach(b=>b.addEventListener('click',()=>toast(b.dataset.cfeature+'은 다음에 추가할게 🩷')));
+showDial();
+
 renderFeed();
 </script></body></html>
