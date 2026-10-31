@@ -175,6 +175,31 @@ button,input{font:inherit}button{border:0;cursor:pointer} .stage{height:100dvh;w
 .plusTyping i:nth-child(2){animation-delay:.15s}.plusTyping i:nth-child(3){animation-delay:.3s}
 @keyframes plusDots{0%,60%,100%{opacity:.28;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
 @media(prefers-reduced-motion:reduce){.plusMessage.plusArriving,.plusTyping i{animation:none}}
+
+/* Instagram official-post draft */
+.igApp{background:#fff;color:#171717;z-index:48;overflow:hidden}
+.igTop{height:72px;padding:20px 18px 8px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;font-family:Georgia,serif;font-size:28px;font-weight:bold}
+.igTop .igIcons{display:flex;gap:18px;font:25px Arial,sans-serif}
+.igScroll{height:calc(100% - 145px);overflow:auto;overscroll-behavior:contain}
+.igStories{display:flex;gap:14px;overflow:auto;padding:16px 12px;border-bottom:1px solid #eee}
+.igStory{min-width:72px;text-align:center;font:11px Arial,sans-serif;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:7px}
+.igStoryCircle{height:61px;width:61px;border:2px solid #dd5588;border-radius:50%;display:grid;place-items:center;font-size:13px;background:#faf0f4;font-weight:700}
+.igPost{border-bottom:7px solid #fafafa;padding-bottom:15px}
+.igPostHead{display:flex;align-items:center;gap:9px;padding:11px 12px;font:13px Arial,sans-serif}
+.igAvatar{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#111;color:#fff;font-weight:700;font-size:10px;flex:none}
+.igPostHead .igMore{margin-left:auto;font-size:23px}
+.igMedia{width:100%;height:340px;background:#f6f6f6;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.igMedia iframe{border:0;width:100%;height:100%;background:#fff}
+.igEmbedNotice{text-align:center;font-size:12px;color:#777;padding:14px}
+.igActions{display:flex;gap:17px;padding:12px;font-size:24px;align-items:center}
+.igActions button{border:0;background:none;font-size:25px;color:#111;cursor:pointer;padding:0}
+.igActions .save{margin-left:auto}
+.igText{padding:0 13px;font:13px/1.55 Arial,sans-serif;white-space:pre-wrap}
+.igText a{color:#174a82}
+.igDate{color:#888;padding:9px 13px;font:11px Arial,sans-serif}
+.igBottom{height:64px;position:absolute;bottom:0;left:0;right:0;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;background:#fff}
+.igBottom button{border:0;background:transparent;font-size:24px;padding:10px;cursor:pointer}
+.igHeart.liked{color:#e43a59}
 </style></head><body>
 <div class="stage"><div class="fit" id="fit"><div class="device locked" id="device"><div class="screen" id="screen">
 <div class="home" id="home">
@@ -266,6 +291,16 @@ button,input{font:inherit}button{border:0;cursor:pointer} .stage{height:100dvh;w
  <form class="plusComposer" id="plusForm"><input id="plusInput" type="text" maxlength="220" enterkeyhint="send" autocomplete="off" placeholder="メッセージを送信" aria-label="メッセージ入力"><button type="submit" id="plusSend" aria-label="送信">↑</button></form>
  <div class="plusNote">ファンメイドの架空のチャット</div>
 </section>
+
+<section class="appPage igApp" id="instagramApp" aria-label="Instagram ホーム">
+ <header class="igTop">Instagram <span class="igIcons"><span>♡</span><span>✉</span></span></header>
+ <div class="igScroll" id="igScroll">
+ <div class="igStories"><div class="igStory"><span class="igStoryCircle">KO1</span>ko1keyzofficial</div><div class="igStory"><span class="igStoryCircle">KO1</span>KO1FILM</div></div>
+ <div id="igPosts"></div>
+ <div class="igEmbedNotice">公開投稿をもとにしたファンメイドの表示です。Instagramの自動同期ではありません。</div>
+ </div>
+ <nav class="igBottom" aria-label="Instagram ナビゲーション"><button title="ホーム" id="igGoTop">⌂</button><button title="検索（装飾）">⌕</button><button title="投稿（装飾）">⊞</button><button title="リール（装飾）">▣</button><button title="プロフィール（装飾）">◉</button></nav>
+</section>
 <section class="appPage" id="comingSoon"><div class="placeholder"><img class="placeholderIcon" id="placeholderImage" alt="앱 아이콘"><h2 id="placeholderName"></h2><p>このアプリは準備中です 🩷</p><button class="goBack" id="placeholderBack">ホーム画面へ</button></div></section>
 <div class="lock" id="lock"><div class="lockDate">10月30日 金曜日</div><div class="lockTime">10:05</div><div class="lockCenter">♡</div><div class="lockLower"><div class="lockShortcuts"><span class="lockCircle">ϟ</span><span class="lockCircle">◉</span></div><button class="lockSwipe" id="unlock">⌃　上にスワイプしてロック解除</button></div></div>
 <div class="status"><span>10:05</span><div class="sRight"><span class="signal"><i></i><i></i><i></i><i></i></span><span style="font-size:14px;margin:0 2px">⌁</span><span class="battery">73</span></div></div>
@@ -354,12 +389,12 @@ function renderCalendar(){
 function calChange(delta){const d=new Date(calYear,calMonth+delta,1);calYear=d.getFullYear();calMonth=d.getMonth();calSelected=calKey(calYear,calMonth,1);renderCalendar();$('#calBody').scrollTop=0;}
 $('#calPrev').addEventListener('click',()=>calChange(-1));$('#calNext').addEventListener('click',()=>calChange(1));
 
-function goHome(){if($('#lightbox').classList.contains('show'))closeLightbox();$('#infoModal').classList.remove('show');xApp.classList.remove('open');placeholder.classList.remove('open');closeGalleryPhoto();galleryApp.classList.remove('open');calendarApp.classList.remove('open');stopCamera();$('#cameraApp').classList.remove('open');$('#plusApp').classList.remove('open');endPhoneCall();phoneApp.classList.remove('open');currentApp='';closeSub();$('#homeBar').classList.remove('light')}
+function goHome(){if($('#lightbox').classList.contains('show'))closeLightbox();$('#infoModal').classList.remove('show');xApp.classList.remove('open');placeholder.classList.remove('open');closeGalleryPhoto();galleryApp.classList.remove('open');calendarApp.classList.remove('open');stopCamera();$('#cameraApp').classList.remove('open');$('#plusApp').classList.remove('open');$('#instagramApp').classList.remove('open');endPhoneCall();phoneApp.classList.remove('open');currentApp='';closeSub();$('#homeBar').classList.remove('light')}
 $('#homeBar').addEventListener('click',()=>{if(device.classList.contains('locked'))unlock();else goHome()});
 /* 홈 이동은 홈 바를 직접 누를 때만 실행. 사진 스크롤·스와이프와 충돌하지 않도록 전역 터치 홈 동작 제거. */
 function openApp(name){unlock();if(name==='inactive')return;
- xApp.classList.remove('open');placeholder.classList.remove('open');galleryApp.classList.remove('open');closeGalleryPhoto();phoneApp.classList.remove('open');calendarApp.classList.remove('open');stopCamera();$('#cameraApp').classList.remove('open');$('#plusApp').classList.remove('open');endPhoneCall();closeSub();currentApp=name;
- if(name==='x'){xApp.classList.add('open');renderFeed();}else if(name==='phone'){phoneApp.classList.add('open');}else if(name==='photos'){galleryApp.classList.add('open');}else if(name==='calendar'){calendarApp.classList.add('open');renderCalendar();}else if(name==='camera'){$('#cameraApp').classList.add('open');startCamera();}else if(name==='plus'){$('#plusApp').classList.add('open');plusScrollBottom();}else{const names={instagram:'Instagram',plus:'Plus Chat',photos:'写真',calendar:'カレンダー',camera:'カメラ',phone:'電話',music:'ミュージック'};$('#placeholderName').textContent=names[name]||name;$('#placeholderImage').src=IMAGES[name]||IMAGES.photos;placeholder.classList.add('open')}
+ xApp.classList.remove('open');placeholder.classList.remove('open');galleryApp.classList.remove('open');closeGalleryPhoto();phoneApp.classList.remove('open');calendarApp.classList.remove('open');stopCamera();$('#cameraApp').classList.remove('open');$('#plusApp').classList.remove('open');$('#instagramApp').classList.remove('open');endPhoneCall();closeSub();currentApp=name;
+ if(name==='x'){xApp.classList.add('open');renderFeed();}else if(name==='phone'){phoneApp.classList.add('open');}else if(name==='photos'){galleryApp.classList.add('open');}else if(name==='calendar'){calendarApp.classList.add('open');renderCalendar();}else if(name==='camera'){$('#cameraApp').classList.add('open');startCamera();}else if(name==='plus'){$('#plusApp').classList.add('open');plusScrollBottom();}else if(name==='instagram'){$('#instagramApp').classList.add('open');renderInstagram();}else{const names={instagram:'Instagram',plus:'Plus Chat',photos:'写真',calendar:'カレンダー',camera:'カメラ',phone:'電話',music:'ミュージック'};$('#placeholderName').textContent=names[name]||name;$('#placeholderImage').src=IMAGES[name]||IMAGES.photos;placeholder.classList.add('open')}
 }
 $$('[data-app]').forEach(el=>el.addEventListener('click',()=>openApp(el.dataset.app)));
 $('#placeholderBack').addEventListener('click',goHome);
@@ -631,4 +666,18 @@ $('#cameraShutter').addEventListener('click',async()=>{
 $('#cameraRecent').addEventListener('click',()=>{if(!capturedPhotos.length)return;stopCamera();$('#cameraApp').classList.remove('open');galleryApp.classList.add('open');openGalleryPhoto(0)});
 restoreCameraPhotos();
 
+
+/* Instagram official post previews; external Instagram embed availability varies */
+const instagramOfficialPosts=[
+ {id:'Dejl3lHk4G4',date:'2026年10月16日',text:'#KO1FILM 🎞️\nMemories from..\nKO1KEYZ DEBUT SHOW CASE\nYOSHIKI🍰\n#KO1KEYZ #コイキーズ #코이키즈',href:'https://www.instagram.com/p/Dejl3lHk4G4/'},
+ {id:'Deg7UEok40X',date:'2026年10月15日',text:'#KO1FILM 🎞️\nMemories from #KO1KO1KO1KEYZ\n青春フォトコンテスト [後編]\n#KO1KEYZ #コイキーズ #코이키즈',href:'https://www.instagram.com/p/Deg7UEok40X/'}
+];
+function renderInstagram(){
+ const dest=document.querySelector('#igPosts');if(dest.dataset.ready)return;
+ dest.innerHTML=instagramOfficialPosts.map((p,i)=>`<article class="igPost"><div class="igPostHead"><span class="igAvatar">KO1</span><strong>ko1keyzofficial</strong><span class="igMore">···</span></div><div class="igMedia"><iframe title="KO1KEYZ Instagram post" loading="lazy" src="https://www.instagram.com/p/${p.id}/embed/captioned/" referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="igActions"><button class="igHeart" aria-label="いいね" type="button">♡</button><button aria-label="コメント（装飾）" type="button">♧</button><button aria-label="シェア（装飾）" type="button">➤</button><button class="save" aria-label="保存" type="button">♧</button></div><div class="igText"><b>ko1keyzofficial</b> ${esc(p.text)}\n<a href="${p.href}" target="_blank" rel="noopener">Instagramで元の投稿を見る</a></div><div class="igDate">${p.date}</div></article>`).join('');
+ dest.querySelectorAll('.igHeart').forEach(b=>b.addEventListener('click',()=>{b.classList.toggle('liked');b.textContent=b.classList.contains('liked')?'♥':'♡'}));
+ dest.querySelectorAll('.igActions .save').forEach(b=>b.addEventListener('click',()=>{b.textContent=b.textContent==='◆'?'♧':'◆'}));
+ dest.dataset.ready='1';
+}
+document.querySelector('#igGoTop').addEventListener('click',()=>{document.querySelector('#igScroll').scrollTop=0});
 </script></body></html>
