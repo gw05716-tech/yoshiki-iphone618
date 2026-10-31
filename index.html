@@ -127,6 +127,30 @@ button,input{font:inherit}button{border:0;cursor:pointer} .stage{height:100dvh;w
 
 /* Plus Chat, isolated from existing apps */
 .plusApp{background:#fff8fb;color:#30242c}.plusHeader{position:absolute;top:56px;left:0;right:0;height:67px;background:#fff;border-bottom:1px solid #f4e4ec;display:flex;align-items:center;gap:13px;padding:0 19px;z-index:2}.plusHeart{border-radius:50%;display:grid;place-items:center;background:#f8b8d2;color:white;width:38px;height:38px;font-size:19px}.plusHeader strong{display:block;font-size:18px}.plusHeader small{display:block;font-size:11px;color:#ac8b9d;margin-top:3px}.plusHeaderDots{margin-left:auto;color:#b6869d;letter-spacing:2px}.plusChatScroll{position:absolute;top:123px;bottom:133px;left:0;right:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 15px;scrollbar-width:none}.plusMessages{display:flex;flex-direction:column;gap:10px}.plusDay{align-self:center;background:#f2e4eb;color:#aa8394;border-radius:14px;font-size:11px;padding:5px 11px;margin:12px 0 6px}.plusMessage{max-width:83%;padding:11px 13px;border-radius:16px;font-size:14px;line-height:1.45;overflow-wrap:anywhere;white-space:pre-wrap;box-shadow:0 1px 2px #00000008}.plusMine{background:#f3aacb;color:#382531;align-self:flex-end;border-bottom-right-radius:4px}.plusFan{background:white;color:#453640;align-self:flex-start;border:1px solid #f5e6ed;border-bottom-left-radius:4px}.plusComposer{position:absolute;bottom:69px;left:0;right:0;display:flex;align-items:center;gap:10px;padding:9px 14px;background:#fff;border-top:1px solid #f4e4eb}.plusComposer input{flex:1;min-width:0;border:1px solid #eee0e8;background:#fff9fc;border-radius:22px;padding:11px 14px;outline:0;font-size:14px;color:#392b33}.plusComposer input:focus{border-color:#ed9fc2}.plusComposer button{width:39px;height:39px;border-radius:50%;background:#ef87b5;color:#fff;font-weight:750;font-size:24px}.plusNote{position:absolute;bottom:35px;left:0;right:0;text-align:center;color:#c3a6b4;font-size:10px;background:#fff}
+
+/* Plus Chat V15 prototype — mirrored idol-side view */
+.plusApp{background:#f5b7d1;color:#242025}
+.plusHeader{background:#f5b7d1;border-bottom:1px solid #e8a5bf;top:43px;height:76px;justify-content:center;padding:0 14px}
+.plusHeader .plusHeart{display:none}
+.plusHeader .plusHeaderTitle{text-align:center}
+.plusHeader .plusHeaderTitle strong{font-size:17px;font-weight:700}
+.plusHeader .plusHeaderTitle small{font-size:12px;color:#745767}
+.plusHeader .plusHeaderDots{position:absolute;right:15px;top:17px;border:0;background:none;color:#26202a;font-size:19px;cursor:pointer;letter-spacing:0}
+.plusChatScroll{top:119px;bottom:123px;padding:14px 13px}
+.plusMessages{gap:9px}
+.plusDay{background:#edabc4;color:#6a5260}
+.plusMessage{max-width:82%;font-size:15px;border:0;box-shadow:none;padding:12px 13px}
+.plusMine{background:#e886b3;color:#291b25;border-radius:24px 24px 7px 24px}
+.plusFan{background:#fff;color:#2a2528;border-radius:24px 24px 24px 7px}
+.plusMine.plusTranslated{padding:0;overflow:hidden}
+.plusSource{padding:12px 13px 10px;white-space:pre-wrap}
+.plusTranslation{background:#f8c6dc;border-top:1px solid #df93b6;padding:10px 13px;color:#32232d;white-space:pre-wrap}
+.plusTranslated.noTranslation .plusTranslation{display:none}
+.plusTime{align-self:flex-end;font-size:11px;color:#75596a;margin-top:8px;margin-bottom:4px}
+.plusComposer{bottom:50px;background:#fff;padding:10px 14px 12px;border-top:0}
+.plusComposer input{background:#f0f0f0;border:1px solid #d7d7d7;color:#272329;padding:12px 15px}
+.plusComposer button{background:#e47fae}
+.plusNote{bottom:33px;font-size:9px;background:#fff}
 </style></head><body>
 <div class="stage"><div class="fit" id="fit"><div class="device locked" id="device"><div class="screen" id="screen">
 <div class="home" id="home">
@@ -206,9 +230,9 @@ button,input{font:inherit}button{border:0;cursor:pointer} .stage{height:100dvh;w
  <div class="calBottom"><span >●</span> 予定</div>
 </section>
 <section class="appPage plusApp" id="plusApp" aria-label="Plus Chat チャット">
- <div class="plusHeader"><span class="plusHeart">♥</span><div><strong>Plus Chat</strong><small>YOSHIKI · KO1KEYZ</small></div><span class="plusHeaderDots">•••</span></div>
+ <div class="plusHeader"><div class="plusHeaderTitle"><strong>YOSHIKI⌄</strong><small>ファンとのチャット</small></div><button type="button" id="plusTranslate" class="plusHeaderDots" aria-label="韓国語訳を切り替える" title="翻訳">文/A</button></div>
  <div class="plusChatScroll" id="plusChatScroll"><div id="plusMessages" class="plusMessages"></div></div>
- <form class="plusComposer" id="plusForm"><input id="plusInput" type="text" maxlength="220" enterkeyhint="send" autocomplete="off" placeholder="メッセージを入力…" aria-label="メッセージ入力"><button type="submit" id="plusSend" aria-label="送信">↑</button></form>
+ <form class="plusComposer" id="plusForm"><input id="plusInput" type="text" maxlength="220" enterkeyhint="send" autocomplete="off" placeholder="メッセージを送信" aria-label="メッセージ入力"><button type="submit" id="plusSend" aria-label="送信">↑</button></form>
  <div class="plusNote">ファンメイドの架空のチャット</div>
 </section>
 <section class="appPage" id="comingSoon"><div class="placeholder"><img class="placeholderIcon" id="placeholderImage" alt="앱 아이콘"><h2 id="placeholderName"></h2><p>このアプリは準備中です 🩷</p><button class="goBack" id="placeholderBack">ホーム画面へ</button></div></section>
@@ -437,14 +461,59 @@ $('#photosStage').addEventListener('touchstart',e=>{galleryTouchX=e.changedTouch
 $('#photosStage').addEventListener('touchend',e=>{let d=e.changedTouches[0].clientX-galleryTouchX;if(Math.abs(d)>45)stepGalleryPhoto(d<0?1:-1)},{passive:true});
 
 
-// Plus Chat: illustrative fanmade exchanges (no real service connection).
+// Plus Chat V15 — previous messages transcribed from the supplied screenshot only.
+// The top of that screenshot was cropped, so the incomplete guitar message is excluded.
 const PLUS_FAN_REPLIES=[
- 'よしくん大好きだよ〜！🩷','오늘도 너무 보고 싶었어 ㅠㅠ','えー！来てくれたのうれしい😭','今日もお疲れさま♡','요시키 밥 꼭 챙겨 먹어!!','かっこよすぎるってば🥹','ずっと応援してるよ！','오늘도 사랑해요🩷','無理しないでね、ゆっくり休んで！','헐 플챗 왔다!!!!','ヨシキのおかげで今日も幸せ','早く会いたいよ〜','우리 요시키 오늘도 화이팅💕','好き好き好き！！！','오늘 사진도 올려주면 안 돼? ㅎㅎ','おやすみ！いい夢見てね','팬들 생각해줘서 고마워 🥺','ほんとにかわいい！','めっちゃ元気出た😭','ずっと味方だよ！','요시키 최고야 진짜','明日も頑張ろうね🌷','大好きが止まらない','오늘도 수고했어!'];
-const PLUS_HISTORY=[['day','10月28日'],['mine','やっほー！今日は何してた？'],['fan','よしくん来た〜！！🩷'],['fan','보고 싶었어 ㅠㅠ'],['fan','今日は学校だったよ！'],['mine','ちゃんとご飯食べた？🍚'],['fan','食べたよ！よしくんは？'],['fan','요시키도 밥 먹었어?'],['day','10月30日'],['mine','おはよー☀️'],['fan','おはよう！今日も大好き♡'],['fan','좋은 아침!!!'],['mine','今日も一緒に頑張ろうね！'],['fan','よしくんのおかげで頑張れる🥹'],['fan','오늘도 화이팅이야!!'],['mine','またあとで来るね〜🩷']];
-let plusReplyRound=0;let plusRemaining=[...PLUS_FAN_REPLIES];
-function plusAdd(type,value){const el=document.createElement('div');el.className=type==='day'?'plusDay':'plusMessage '+(type==='mine'?'plusMine':'plusFan');el.textContent=value;$('#plusMessages').appendChild(el)}
-PLUS_HISTORY.forEach(([kind,message])=>plusAdd(kind,message));
+ 'よしくん大好き！！🩷','요시키 진짜 보고싶어ㅠㅠ','今日もお疲れさま！','우리 요시키 잘 챙겨 먹어요💕',
+ 'やばい嬉しい😭','ほんとにかわいい','요시킨 지금 뭐해??','ずっと応援してるよ〜！',
+ '오늘도 너무 좋아해','よしくん今日もありがとう♡','うれしすぎる！！','ㅋㅋㅋㅋㅋㅋㅋ귀여워',
+ '早く会いたい🥹','今日も最高だったよ','요시키가 행복하면 나도 행복해','無理しないでね！',
+ '好きすぎて困る😭','잘 자요 내 사랑','今日も大好きだよ','플챗 와줘서 고마워!!',
+ 'おつかれさま！ゆっくり休んでね','오늘 하루도 수고했어','えっ待って可愛すぎる','언제 또 와줄 거야 ㅎㅎ',
+ 'ねえ本当に大好き！','요시키 덕분에 행복하다','かわいくて泣いた','ずっと一緒にいようね',
+ '사랑해 사랑해 사랑해','よしくん最高🩷','今日も会いたかった！','잘 챙겨 먹고 푹 쉬어🥺',
+ 'いつもありがとう','우리 요시키 최고다 진짜','夢に出てきてね♡','오늘도 파이팅!!',
+ 'もう一回送って！笑','보고싶어어어','まじで愛してる！！！','사랑둥이 요시키🫶'
+];
+const PLUS_HISTORY=[
+ {type:'day',text:'10月30日'},
+ {type:'mine',jp:'最近全然触れてなかったから無性に弾きたくなってさ、また見せれる機会あったらいいな',ko:'요즘 전혀 만지지 않아서 갑자기 치고 싶어졌어. 또 보여줄 기회가 있으면 좋겠어'},
+ {type:'time',text:'23:00'},
+ {type:'mine',jp:'ねむいね',ko:'졸리네'},
+ {type:'mine',jp:'今日もおつかれさま！',ko:'오늘도 수고했어!'},
+ {type:'mine',jp:'ねむたい',ko:'졸리다'},
+ {type:'time',text:'23:04'},
+ {type:'mine',jp:'今日も大好きだよ',ko:'오늘도 사랑해'},
+ {type:'mine',jp:'おやすみ',ko:'잘 자요.'},
+ {type:'mine',jp:'ほんとにねむい',ko:'진짜 졸리다'}
+];
+let plusRemaining=[...PLUS_FAN_REPLIES];let plusTranslated=true;
+function plusAdd(type,value,translation){
+ const el=document.createElement('div');
+ if(type==='day'||type==='time'){
+  el.className=type==='day'?'plusDay':'plusTime';el.textContent=value;
+ }else if(type==='mine'&&translation){
+  el.className='plusMessage plusMine plusTranslated'+(plusTranslated?'':' noTranslation');
+  const src=document.createElement('div');src.className='plusSource';src.textContent=value;
+  const tr=document.createElement('div');tr.className='plusTranslation';tr.textContent=translation;
+  el.append(src,tr);
+ }else{el.className='plusMessage '+(type==='mine'?'plusMine':'plusFan');el.textContent=value;}
+ $('#plusMessages').appendChild(el);
+}
+PLUS_HISTORY.forEach(m=>plusAdd(m.type,m.text||m.jp,m.ko));
 function plusScrollBottom(){const e=$('#plusChatScroll');if(e)e.scrollTop=e.scrollHeight}
-$('#plusForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#plusInput'),msg=input.value.trim();if(!msg)return;plusAdd('mine',msg);input.value='';const count=3+(plusReplyRound++%3);for(let i=0;i<count;i++){if(!plusRemaining.length)plusRemaining=[...PLUS_FAN_REPLIES];const j=Math.floor(Math.random()*plusRemaining.length);plusAdd('fan',plusRemaining.splice(j,1)[0])}plusScrollBottom();input.blur()});
+$('#plusTranslate').addEventListener('click',()=>{plusTranslated=!plusTranslated;$$('#plusMessages .plusTranslated').forEach(el=>el.classList.toggle('noTranslation',!plusTranslated))});
+$('#plusForm').addEventListener('submit',e=>{
+ e.preventDefault();const input=$('#plusInput'),msg=input.value.trim();if(!msg)return;
+ plusAdd('mine',msg);input.value='';
+ // 10–15 unique randomized responses per send; no deliberate typing delay.
+ const count=10+Math.floor(Math.random()*6);
+ for(let i=0;i<count;i++){
+  if(!plusRemaining.length)plusRemaining=[...PLUS_FAN_REPLIES];
+  const j=Math.floor(Math.random()*plusRemaining.length);
+  plusAdd('fan',plusRemaining.splice(j,1)[0]);
+ }
+ plusScrollBottom();input.blur();
+});
 renderFeed();
 </script></body></html>
