@@ -152,8 +152,8 @@ button,input{font:inherit}button{border:0;cursor:pointer} .stage{height:100dvh;w
 .plusComposer button{background:#e47fae}
 .plusNote{bottom:33px;font-size:9px;background:#fff}
 
-/* Plus Chat V16: lively cascading replies */
-.plusMessage.plusArriving{animation:plusPop .22s cubic-bezier(.16,.8,.3,1) both;transform-origin:left bottom}
+/* Plus Chat V17: separately timed incoming messages */
+.plusMessage.plusArriving{animation:plusPop .36s cubic-bezier(.16,.8,.3,1) both;transform-origin:left bottom}
 .plusMessage.plusMine.plusArriving{transform-origin:right bottom}
 @keyframes plusPop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 .plusTyping{align-self:flex-start;display:flex;gap:5px;align-items:center;padding:13px 16px;background:white;border-radius:22px 22px 22px 7px;min-height:41px;margin:0 0 2px 0}
@@ -513,48 +513,50 @@ function plusAdd(type,value,translation){
 PLUS_HISTORY.forEach(m=>plusAdd(m.type,m.text||m.jp,m.ko));
 function plusScrollBottom(){const e=$('#plusChatScroll');if(e)e.scrollTop=e.scrollHeight}
 $('#plusTranslate').addEventListener('click',()=>{plusTranslated=!plusTranslated;$$('#plusMessages .plusTranslated').forEach(el=>el.classList.toggle('noTranslation',!plusTranslated))});
+// V17: one incoming reply per timer tick; never render the entire queue at once.
 let plusReplyQueue=[];
 let plusReplyTimer=null;
+let plusReplyCount=0;
+function plusTypingShow(){
+ const existing=$('#plusTypingIndicator');if(existing)existing.remove();
+ const typing=document.createElement('div');typing.className='plusTyping';typing.id='plusTypingIndicator';
+ typing.setAttribute('aria-label','返信を受信中');typing.innerHTML='<i></i><i></i><i></i>';
+ $('#plusMessages').appendChild(typing);plusScrollBottom();
+}
 function plusNextReply(){
- if(!plusReplyQueue.length){
-  plusReplyTimer=null;
-  const typing=$('#plusTypingIndicator');if(typing)typing.remove();
-  return;
- }
+ plusReplyTimer=null;
  const typing=$('#plusTypingIndicator');if(typing)typing.remove();
+ if(!plusReplyQueue.length)return;
  const value=plusReplyQueue.shift();
  plusAdd('fan',value);
  const last=$('#plusMessages').lastElementChild;
  if(last)last.classList.add('plusArriving');
  plusScrollBottom();
+ plusReplyCount++;
  if(plusReplyQueue.length){
-  // Natural bursts: occasional double replies, occasional longer gaps.
-  const delay=plusReplyQueue.length%5===0?360+Math.random()*280:110+Math.random()*230;
-  plusReplyTimer=setTimeout(plusNextReply,delay);
- }else{plusReplyTimer=null;}
-}
-function plusStartReplies(){
- if(plusReplyTimer!==null)clearTimeout(plusReplyTimer);
- const indicator=$('#plusTypingIndicator');if(indicator)indicator.remove();
- const typing=document.createElement('div');typing.className='plusTyping';typing.id='plusTypingIndicator';
- typing.setAttribute('aria-label','返信が届いています');typing.innerHTML='<i></i><i></i><i></i>';
- $('#plusMessages').appendChild(typing);plusScrollBottom();
- plusReplyTimer=setTimeout(plusNextReply,520);
+  // At least 650 ms between messages, so each arrival is clearly perceptible on iPhone.
+  // Occasional pauses make the incoming fan messages feel less robotic.
+  const delay=(plusReplyCount%4===0?1150:650)+Math.floor(Math.random()*420);
+  plusReplyTimer=setTimeout(()=>{plusTypingShow();plusReplyTimer=setTimeout(plusNextReply,240)},delay);
+ }
 }
 $('#plusForm').addEventListener('submit',e=>{
  e.preventDefault();const input=$('#plusInput'),msg=input.value.trim();if(!msg)return;
- plusAdd('mine',msg);const last=$('#plusMessages').lastElementChild;
+ plusAdd('mine',msg);
+ const last=$('#plusMessages').lastElementChild;
  if(last)last.classList.add('plusArriving');
- input.value='';
+ input.value='';input.blur();
  const count=10+Math.floor(Math.random()*6);
  for(let i=0;i<count;i++){
   if(!plusRemaining.length)plusRemaining=[...PLUS_FAN_REPLIES];
   const j=Math.floor(Math.random()*plusRemaining.length);
   plusReplyQueue.push(plusRemaining.splice(j,1)[0]);
  }
- plusScrollBottom();input.blur();
- // Replies arrive quickly, one after another, not as one static block.
- if(plusReplyTimer===null)plusStartReplies();
+ plusScrollBottom();
+ if(plusReplyTimer===null){
+  plusTypingShow();
+  plusReplyTimer=setTimeout(plusNextReply,1100);
+ }
 });
 renderFeed();
 </script></body></html>
