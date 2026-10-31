@@ -256,14 +256,19 @@ function startPhoneCall(){
  voiceClip=new Audio(VOICE_CLIPS[Math.floor(Math.random()*VOICE_CLIPS.length)]);
  voiceClip.preload='auto';
  voiceClip.playsInline=true;
- // Unlock playback on iOS Safari while still inside the user's call-button gesture.
- const unlock=voiceClip.play();
- if(unlock&&unlock.then)unlock.then(()=>{if(phonePhase==='ringing'&&voiceClip){voiceClip.pause();voiceClip.currentTime=0}}).catch(()=>{});
+ // Never start the voice during the dialing tone; audio begins only after the tone stops.
  phonePhase='ringing';phoneApp.classList.add('calling');device.classList.add('phoneCalling');$('#homeBar').classList.add('light');$('#phoneCalledNumber').textContent='KO1LY🩷';$('#phoneCallStatus').textContent='연결 중…';phoneMuted=false;phoneSpeaker=false;$('#phoneMute').classList.remove('muted');$('#phoneSpeaker').classList.remove('muted');ringPhone();
  phoneTimeout=setTimeout(()=>{
   if(phonePhase!=='ringing')return;
   silencePhone();phonePhase='connected';phoneStartAt=Date.now();phoneElapsed();phoneTicker=setInterval(phoneElapsed,1000);
-  if(voiceClip){voiceClip.currentTime=0;voiceClip.muted=phoneMuted;voiceClip.onended=()=>{if(phonePhase==='connected')endPhoneCall()};const result=voiceClip.play();if(result&&result.catch)result.catch(()=>{$('#phonePlayVoice').style.display='block';$('#phonePlayVoice').textContent='▶ 음성 듣기';})}
+  // Give the ringing AudioContext time to shut down before starting the voice.
+  setTimeout(()=>{
+   if(phonePhase!=='connected'||!voiceClip)return;
+   voiceClip.currentTime=0;voiceClip.muted=phoneMuted;
+   voiceClip.onended=()=>{if(phonePhase==='connected')endPhoneCall()};
+   const result=voiceClip.play();
+   if(result&&result.catch)result.catch(()=>{if(phonePhase==='connected'){$('#phonePlayVoice').style.display='block';$('#phonePlayVoice').textContent='▶ 음성 듣기';}});
+  },180);
  },5000)
 }
 function resumePhoneVoice(){if(phonePhase==='connected'&&voiceClip){const p=voiceClip.play();if(p&&p.then)p.then(()=>{$('#phonePlayVoice').style.display='none'}).catch(()=>{$('#phonePlayVoice').style.display='block'});}}
